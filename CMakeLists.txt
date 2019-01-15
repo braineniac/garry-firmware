@@ -124,8 +124,7 @@ rosserial_configure_client(
 	TOOLCHAIN_FILE ${ROSSERIAL_ARDUINO_TOOLCHAIN}
 	)
 
-
-## Specify additional locations of header files
+# Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
 # include
