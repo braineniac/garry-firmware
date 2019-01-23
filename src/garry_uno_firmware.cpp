@@ -41,7 +41,7 @@ void setup() {
     /* initialise LEDs */
     pinMode(4, OUTPUT);
     pinMode(7, OUTPUT);
-    
+
     /* initialising ROS */
     nh.initNode();
     nh.subscribe(sub_led_left_eye);
@@ -55,147 +55,147 @@ void setup() {
 
 /* main loop */
 void loop() {
-	
-	nh.spinOnce();
-	delay(1000);
+
+    nh.spinOnce();
+    delay(1000);
 }
 
 /* callback functions */
 
 void led_left_eye_cb(const std_msgs::Bool& msg) {
-	
-	if (msg.data == 1)
-		digitalWrite(4, HIGH);
-	else
-		digitalWrite(4, LOW);
-	
-	#ifdef ENABLE_LOG
-	char logoutput[MAX_LOG_LEN];
-	snprintf(logoutput,MAX_LOG_LEN,"Setting left eye %d",msg.data);
-	nh.loginfo(logoutput);
-	#endif
+
+    if (msg.data == 1)
+        digitalWrite(4, HIGH);
+    else
+        digitalWrite(4, LOW);
+
+    #ifdef ENABLE_LOG
+    char logoutput[MAX_LOG_LEN];
+    snprintf(logoutput,MAX_LOG_LEN,"Setting left eye %d",msg.data);
+    nh.loginfo(logoutput);
+    #endif
 }
 
 void led_right_eye_cb(const std_msgs::Bool& msg) {
-	
-	if (msg.data == 1)
-		digitalWrite(7, HIGH);
-	else
-		digitalWrite(7, LOW);
-	
-	#ifdef ENABLE_LOG
-	char logoutput[MAX_LOG_LEN];
-	snprintf(logoutput,MAX_LOG_LEN,"Setting right eye %d",msg.data);
-	nh.loginfo(logoutput);
-	#endif
-}
 
-void motor_left_cb(const geometry_msgs::Twist& msg) {
+    if (msg.data == 1)
+        digitalWrite(7, HIGH);
+    else
+        digitalWrite(7, LOW);
 
-	uint8_t speed = (uint8_t) (255 * msg.linear.x);
-	
-	#ifdef ENABLE_LOG
-	char logoutput[MAX_LOG_LEN];
-	snprintf(logoutput,MAX_LOG_LEN,"Left motor moving, speed: %d",speed);
-	nh.loginfo(logoutput);
-	#endif
-
-	if (msg.linear.x > 0)
-		digitalWrite(12, LOW); // A motor forward
-
-	else
-		digitalWrite(12, HIGH); // A motor backwards	
-	
-	
-	digitalWrite(9, LOW); // disable A motor brake
-	analogWrite(3, speed);
-
-	delay(1000);
-
-	digitalWrite(9, HIGH); //enable motor A brake
+    #ifdef ENABLE_LOG
+    char logoutput[MAX_LOG_LEN];
+    snprintf(logoutput,MAX_LOG_LEN,"Setting right eye %d",msg.data);
+    nh.loginfo(logoutput);
+    #endif
 }
 
 void motor_right_cb(const geometry_msgs::Twist& msg) {
 
-	uint8_t speed = (uint8_t) (255 * abs(msg.linear.x));
-	
-	#ifdef ENABLE_LOG
-	char logoutput[MAX_LOG_LEN];
-	snprintf(logoutput,MAX_LOG_LEN,"Right motor moving, speed: %d",speed);
-	nh.loginfo(logoutput);
-	#endif
+    uint8_t speed = (uint8_t) (255 * msg.linear.x);
 
-	if (msg.linear.x > 0)
-		digitalWrite(13, HIGH); // B motor forward
+    #ifdef ENABLE_LOG
+    char logoutput[MAX_LOG_LEN];
+    snprintf(logoutput,MAX_LOG_LEN,"Left motor moving, speed: %d",speed);
+    nh.loginfo(logoutput);
+    #endif
 
-	else
-		digitalWrite(13, LOW); // B motor backwards	
-	
-	digitalWrite(8, LOW); // disable B motor brake
-	analogWrite(11, speed);
+    if (msg.linear.x > 0)
+        digitalWrite(12, LOW); // A motor forward
 
-	delay(1000);
+    else
+        digitalWrite(12, HIGH); // A motor backwards
 
-	digitalWrite(8, HIGH); // enable motor B brake
+
+    digitalWrite(9, LOW); // disable A motor brake
+    analogWrite(3, speed);
+
+    delay(1000);
+
+    digitalWrite(9, HIGH); //enable motor A brake
+}
+
+void motor_left_cb(const geometry_msgs::Twist& msg) {
+
+    uint8_t speed = (uint8_t) (255 * abs(msg.linear.x));
+
+    #ifdef ENABLE_LOG
+    char logoutput[MAX_LOG_LEN];
+    snprintf(logoutput,MAX_LOG_LEN,"Right motor moving, speed: %d",speed);
+    nh.loginfo(logoutput);
+    #endif
+
+    if (msg.linear.x > 0)
+        digitalWrite(13, HIGH); // B motor forward
+
+    else
+        digitalWrite(13, LOW); // B motor backwards
+
+    digitalWrite(8, LOW); // disable B motor brake
+    analogWrite(11, speed);
+
+    delay(1000);
+
+    digitalWrite(8, HIGH); // enable motor B brake
 
 }
 
 void motor_both_cb(const geometry_msgs::Twist& msg) {
 
-	uint8_t speed = (uint8_t) (255 * abs(msg.linear.x));
-	
-	#ifdef ENABLE_LOG
-	char logoutput[MAX_LOG_LEN];
-	snprintf(logoutput,MAX_LOG_LEN,"Both motors moving, speed: %d",speed);
-	nh.loginfo(logoutput);
-	#endif
+    uint8_t speed = (uint8_t) (255 * abs(msg.linear.x));
 
-	if (msg.linear.x > 0) {
-		digitalWrite(13, HIGH); // B motor forward
-		digitalWrite(12, LOW); // A motor forward
-	}
-	else {
-		digitalWrite(13, LOW); // B motor backwards
-		digitalWrite(12, HIGH); // A motor forward
-	}
+    #ifdef ENABLE_LOG
+    char logoutput[MAX_LOG_LEN];
+    snprintf(logoutput,MAX_LOG_LEN,"Both motors moving, speed: %d",speed);
+    nh.loginfo(logoutput);
+    #endif
 
-	
-	digitalWrite(9, LOW); // disable A motor brake
-	digitalWrite(8,LOW); // disable B motor brake
-	
-	analogWrite(11, speed);
-	analogWrite(3,speed);
+    if (msg.linear.x > 0) {
+        digitalWrite(13, HIGH); // B motor forward
+        digitalWrite(12, LOW); // A motor forward
+    }
+    else {
+        digitalWrite(13, LOW); // B motor backwards
+        digitalWrite(12, HIGH); // A motor forward
+    }
 
-	delay(1000);
 
-	digitalWrite(9, HIGH); // enable motor A brake
-	digitalWrite(8, HIGH); // enable motor B brake
+    digitalWrite(9, LOW); // disable A motor brake
+    digitalWrite(8,LOW); // disable B motor brake
+
+    analogWrite(11, speed);
+    analogWrite(3,speed);
+
+    delay(1000);
+
+    digitalWrite(9, HIGH); // enable motor A brake
+    digitalWrite(8, HIGH); // enable motor B brake
 }
 
 void servo_upper_cb(const geometry_msgs::Twist& msg) {
 
-	int angle = (int) (360*msg.angular.x);
+    int angle = (int) (360*msg.angular.x);
 
-	#ifdef ENABLE_LOG
-	char logoutput[MAX_LOG_LEN];
-	snprintf(logoutput,MAX_LOG_LEN,"Upper servo moving, angle: %d",angle);
-	nh.loginfo(logoutput);
-	#endif
+    #ifdef ENABLE_LOG
+    char logoutput[MAX_LOG_LEN];
+    snprintf(logoutput,MAX_LOG_LEN,"Upper servo moving, angle: %d",angle);
+    nh.loginfo(logoutput);
+    #endif
 
-	servoA.write(angle);
+    servoA.write(angle);
 
 }
 
 void servo_lower_cb(const geometry_msgs::Twist& msg) {
 
-	int angle = (int) (360*msg.angular.x);
-	
-	#ifdef ENABLE_LOG
-	char logoutput[MAX_LOG_LEN];
-	snprintf(logoutput,MAX_LOG_LEN, "Lower servo moving, angle: %d", angle);
-	nh.loginfo(logoutput);
-	#endif
+    int angle = (int) (360*msg.angular.x);
 
-	servoB.write(angle);
+    #ifdef ENABLE_LOG
+    char logoutput[MAX_LOG_LEN];
+    snprintf(logoutput,MAX_LOG_LEN, "Lower servo moving, angle: %d", angle);
+    nh.loginfo(logoutput);
+    #endif
+
+    servoB.write(angle);
 
 }
