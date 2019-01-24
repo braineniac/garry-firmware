@@ -4,7 +4,7 @@
 //#define ENABLE_LOG
 
 #define MAX_LOG_LEN 30
-#define MOTOR_DELAY 100
+#define MOTOR_DELAY 1000
 
 /* global variables */
 Servo servoA;
@@ -90,11 +90,11 @@ void led_right_eye_cb(const std_msgs::Bool& msg) {
 void cmd_vel_cb(const geometry_msgs::Twist& msg) {
 
     if(msg.linear.x != 0) {
-        uint8_t speed = (uint8_t) (255 * msg.linear.x);
+        uint8_t speed = ((uint8_t) (abs(255 * msg.linear.x)));
         (msg.linear.x > 0) ? forward(speed) : backward(speed);
     }
     else if (msg.angular.z != 0) {
-        uint8_t speed = (uint8_t) (255 * msg.angular.z);
+        uint8_t speed = ((uint8_t) (abs(255 * msg.angular.z)));
         (msg.angular.z > 0) ? turn_left(speed) : turn_right(speed);
     }
 }
