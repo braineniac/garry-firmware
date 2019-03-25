@@ -4,7 +4,7 @@
 //#define ENABLE_LOG
 
 #define MAX_LOG_LEN 30
-#define MOTOR_DELAY 1000
+#define MOTOR_DELAY 100
 
 /* global variables */
 Servo servoA;
@@ -54,7 +54,7 @@ void setup() {
 void loop() {
 
     nh.spinOnce();
-    delay(1000);
+    delay(1);
 }
 
 /* callback functions */
