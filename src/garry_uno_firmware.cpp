@@ -89,11 +89,11 @@ void led_right_eye_cb(const std_msgs::Bool& msg) {
 
 void cmd_vel_cb(const geometry_msgs::Twist& msg) {
 
-    if(msg.linear.x != 0) {
+    if(abs(msg.linear.x) >= abs(msg.angular.z)) {
         uint8_t speed = ((uint8_t) (abs(255 * msg.linear.x)));
         (msg.linear.x > 0) ? forward(speed) : backward(speed);
     }
-    else if (msg.angular.z != 0) {
+    else if (abs(msg.angular.z) >= abs(msg.linear.x)) {
         uint8_t speed = ((uint8_t) (abs(255 * msg.angular.z)));
         (msg.angular.z > 0) ? turn_left(speed) : turn_right(speed);
     }
